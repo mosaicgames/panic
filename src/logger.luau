@@ -68,6 +68,7 @@ function Logger.log(msg, opts: types.Opts)
 
 	local final = table.concat(out, "\n")
 	warn(final)
+	return nil
 end
 
 return setmetatable({}, { __index = Logger })
