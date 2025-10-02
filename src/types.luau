@@ -3,4 +3,4 @@ export type Opts = {
 	tags : {string}?
 }
 
-return nil
+return {}
