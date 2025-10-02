@@ -1,0 +1,15 @@
+[package]
+name = "mosaicgames/panic"
+description = "A lightweight debugging and error-handling library for Roblox."
+license = "MIT"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+exclude = ["**"]
+include = ["src", "src/**", "module.project.json", "wally.toml", "LICENSE"]
+
+[dependencies]
+
+[dev-dependencies]
+Jest = "jsdotlua/jest@3.10.0"
+JestGlobals = "jsdotlua/jest-globals@3.10.0"

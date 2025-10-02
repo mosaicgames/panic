@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  analyze:
+    if: github.event_name != 'push' || (!contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.message, '(skip ci)') && !contains(github.event.head_commit.message, 'skip-ci'))
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: CompeyDev/setup-rokit@v0.1.2
+
+      - name: Install dependencies
+        run: wally install
+
+      - name: Generate sourcemap.json
+        run: rojo sourcemap default.project.json -o sourcemap.json
+
+      - name: Download global Roblox types
+        run: curl -o scripts/roblox.d.luau https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/main/scripts/globalTypes.d.luau
+
+      - name: Analyze
+        run: luau-lsp analyze --defs=scripts/roblox.d.luau --base-luaurc=.luaurc --sourcemap=sourcemap.json --ignore="**/_Index/**" src
+
+      - name: Check code quality
+        run: |
+          selene src
+          stylua --check src
+  test:
+    name: Run Luau tests via Open Cloud
+    runs-on: ubuntu-latest
+    needs: [analyze]
+    concurrency:
+      group: luau-execution
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v3
+      - uses: CompeyDev/setup-rokit@v0.1.2
+
+      - name: Install dependencies
+        run: wally install
+
+      - name: Run tests via Open Cloud
+        run: ./scripts/shell/test.sh scripts/runTest.luau
+        env:
+          ROBLOX_API_KEY: ${{ secrets.ROBLOX_API_KEY }}
+          ROBLOX_TEST_UNIVERSE_ID: ${{ secrets.ROBLOX_TEST_UNIVERSE_ID }}
+          ROBLOX_TEST_PLACE_ID: ${{ secrets.ROBLOX_TEST_PLACE_ID }}

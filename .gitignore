@@ -1,0 +1,14 @@
+# ──────────────── Deps ────────────────
+/DevPackages
+/Packages
+
+# ─────────────── Output ───────────────
+*.rbxl
+*.rbxm
+*.lock
+sourcemap.json
+__pycache__
+
+# ──────────────── Misc ────────────────
+/.vscode
+.DS_Store

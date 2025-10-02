@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  bump-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set version from tag
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Update wally.toml version
+        run: sed -i 's/^version = ".*"/version = "'$VERSION'"/' wally.toml
+
+      - name: Commit and push version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add wally.toml
+          git commit -m "chore: bump wally.toml version to $VERSION [skip ci]" || echo "No changes to commit"
+          git push origin HEAD:main
+
+  release-github:
+    needs: bump-versions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Rokit
+        uses: CompeyDev/setup-rokit@v0.1.2
+
+      - name: Install packages with Wally
+        run: wally install
+
+      - name: Remove test files
+        run: |
+          rm -rf src/__tests__
+          rm -rf src/jest.config.luau
+
+      - name: Build Roblox model with Rojo
+        run: rojo build module.project.json -o panic.rbxm
+
+      - name: Upload release artifact
+        uses: softprops/action-gh-release@v1
+        with:
+          files: panic.rbxm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-wally:
+    needs: bump-versions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Rokit
+        uses: CompeyDev/setup-rokit@v0.1.2
+
+      - name: Install packages with Wally
+        run: wally install
+
+      - name: Authenticate with Wally
+        run: |
+          mkdir -p ~/.wally
+          echo "$WALLY_AUTH" > ~/.wally/auth.toml
+        env:
+          WALLY_AUTH: ${{ secrets.WALLY_AUTH }}
+
+      - name: Remove test files
+        run: |
+          rm -rf src/__tests__
+          rm -rf src/jest.config.luau
+
+      - name: Publish to Wally
+        run: wally publish
