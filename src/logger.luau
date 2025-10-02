@@ -41,7 +41,7 @@ end
 
 function Logger.log(msg, opts: types.Opts)
 	opts = opts or {}
-	local tags= opts.tags or {}
+	local tags = opts.tags or {}
 	local skip = 3
 
 	local ts = isoTimestamp()

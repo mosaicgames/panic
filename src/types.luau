@@ -1,6 +1,5 @@
-
 export type Opts = {
-	tags : {string}?
+	tags: { string }?,
 }
 
 return nil
