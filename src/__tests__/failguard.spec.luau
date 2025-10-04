@@ -5,13 +5,22 @@ local JestGlobals = require(ReplicatedStorage:WaitForChild("DevPackages"):WaitFo
 local it = JestGlobals.it
 local expect = JestGlobals.expect
 
-it("should set and handle a custom policy", function()
-	local fg = failGuard.new() :: any
-	fg:setPolicy("_custom", "abort")
+it("should set and handle abort policy", function()
+	local fg = failGuard.new()
+	fg:setPolicy("_fgabort", "abort")
 
-	local policyResult = fg:handle("_custom")
+	local policyResult = fg:handle("_fgabort")
 
 	expect(policyResult).toBe("abort")
+end)
+
+it("should set and handle ignore policy", function()
+	local fg = failGuard.new()
+	fg:setPolicy("_fgignore", "ignore")
+
+	local policyResult = fg:handle("_fgignore")
+
+	expect(policyResult).toBe("ignore")
 end)
 
 it("should ignore if no policy is set", function()

@@ -5,8 +5,14 @@ local types = require(script.types)
 local Panic = {}
 Panic.__index = Panic
 
+type PanicInstance = {
+	failguard: any,
+	Set: (self: PanicInstance, tag: string, policy: types.Policy) -> (),
+	Try: (self: PanicInstance, fn: () -> ...any, Opts: types.Opts?) -> (boolean, ...any),
+}
+
 function new()
-	local self = setmetatable({}, Panic)
+	local self: PanicInstance = setmetatable({}, Panic) :: any
 	self.failguard = failGuard.new()
 
 	return self

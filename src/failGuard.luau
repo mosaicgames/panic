@@ -3,13 +3,19 @@ local types = require(script.Parent.types)
 local FailGuard = {}
 FailGuard.__index = FailGuard
 
+type FailGuardInstance = {
+	policies: types.PolicyMap,
+	setPolicy: (self: FailGuardInstance, tag: string, policy: types.Policy) -> (),
+	handle: (self: FailGuardInstance, tag: string) -> types.Policy,
+}
+
 function FailGuard.new()
-	local self = setmetatable({}, FailGuard)
+	local self = setmetatable({}, FailGuard) :: any
 	self.policies = {
 		["_panic"] = "ignore",
 		["_default"] = "ignore",
 	} :: types.PolicyMap
-	return self
+	return self :: FailGuardInstance
 end
 
 function FailGuard:setPolicy(tag: string, policy: types.Policy)
