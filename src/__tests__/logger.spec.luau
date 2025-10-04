@@ -7,6 +7,6 @@ local expect = JestGlobals.expect
 local logger = require(ReplicatedStorage:WaitForChild("Packages"):WaitForChild("panic")).logger
 
 it("should return correct log structure", function()
-	local result = logger.log("Im so panic bro", { tags = { "test" } })
+	local result = logger("Im so panic bro", { tag = "test" })
 	expect(result).toBe(true)
 end)

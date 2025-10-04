@@ -1,8 +1,5 @@
 local types = require(script.Parent.types)
 
-local Logger = {}
-Logger.__index = Logger
-
 local START_TIME = os.clock()
 
 local function isoTimestamp()
