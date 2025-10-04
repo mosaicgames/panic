@@ -8,7 +8,7 @@ local logger = require(ReplicatedStorage:WaitForChild("Packages"):WaitForChild("
 
 it("should log error message with tag", function()
 	local ok = logger("Test error", { tag = "_panic" })
-	expect(ok).to.equal(true)
+	expect(ok).toBe(true)
 end)
 
 it("should fallback to _default tag if none provided", function()

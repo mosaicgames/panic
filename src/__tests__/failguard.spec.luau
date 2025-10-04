@@ -11,7 +11,7 @@ it("should set and handle a custom policy", function()
 
 	local policyResult = fg:handle("_custom")
 
-	expect(policyResult).to.equal("abort")
+	expect(policyResult).toBe("abort")
 end)
 
 it("should ignore if no policy is set", function()
