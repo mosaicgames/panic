@@ -39,7 +39,7 @@ local function gatherBacktrace(skipLevel)
 	return out
 end
 
-function Logger.log(msg, opts: types.Opts)
+return function (msg, opts: types.Opts)
 	opts = opts or {}
 	local tag = opts.tag or "_core"
 	local skip = 3
@@ -67,5 +67,3 @@ function Logger.log(msg, opts: types.Opts)
 	warn(final)
 	return true
 end
-
-return setmetatable({}, { __index = Logger })

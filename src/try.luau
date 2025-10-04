@@ -17,7 +17,7 @@ return function(fn: () -> ...any, failguard: any, opts: types.Opts?): (boolean, 
 
 	if not ok then
 		local err = results[1]
-		logger.log(tostring(err), options or {})
+		logger(tostring(err), options or {})
 		failguard:handle(options.tag)
 
 		return false
