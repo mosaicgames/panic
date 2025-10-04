@@ -36,9 +36,9 @@ local function gatherBacktrace(skipLevel)
 	return out
 end
 
-return function(msg, opts: types.Opts)
-	opts = opts or {}
-	local tag = opts.tag or "_core"
+return function(msg, opts: types.Opts?)
+	local options = opts or { tag = "_default" }
+	local tag = options.tag
 	local skip = 3
 
 	local ts = isoTimestamp()
@@ -62,5 +62,10 @@ return function(msg, opts: types.Opts)
 
 	local final = table.concat(out, "\n")
 	warn(final)
-	return true
+
+	if final:len() > 0 then
+		return true
+	else
+		return false
+	end
 end
