@@ -36,7 +36,7 @@ local function gatherBacktrace(skipLevel)
 	return out
 end
 
-return function (msg, opts: types.Opts)
+return function(msg, opts: types.Opts)
 	opts = opts or {}
 	local tag = opts.tag or "_core"
 	local skip = 3
