@@ -4,9 +4,16 @@ local JestGlobals = require(ReplicatedStorage:WaitForChild("DevPackages"):WaitFo
 local it = JestGlobals.it
 local expect = JestGlobals.expect
 
-local logger = require(ReplicatedStorage:WaitForChild("Packages"):WaitForChild("panic")).logger
+local logger = require(ReplicatedStorage:WaitForChild("Packages"):WaitForChild("panic"):WaitForChild("logger"))
 
-it("should return correct log structure", function()
-	local result = logger.log("Im so panic bro", { tags = { "test" } })
-	expect(result).toBe(true)
+it("should log error message with tag", function()
+	local ok = logger("Test error", { tag = "_panic" })
+	expect(ok).toBe(true)
+	expect(ok).toEqual(expect.never.stringContaining("_panic"))
+end)
+
+it("should fallback to _default tag if none provided", function()
+	local ok = logger("Another error")
+	expect(ok).toBe(true)
+	expect(ok).toEqual(expect.never.stringContaining("_default"))
 end)

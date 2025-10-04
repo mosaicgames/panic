@@ -10,6 +10,8 @@ local processServiceExists, ProcessService = pcall(function()
 	return game:GetService("ProcessService")
 end)
 
+workspace:SetAttribute("__PANIC_CLOUD_TEST_ENV", true)
+
 local status, result = runCLI(Project, {
 	verbose = false,
 	ci = false,

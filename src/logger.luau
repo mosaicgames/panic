@@ -1,8 +1,5 @@
 local types = require(script.Parent.types)
 
-local Logger = {}
-Logger.__index = Logger
-
 local START_TIME = os.clock()
 
 local function isoTimestamp()
@@ -39,9 +36,9 @@ local function gatherBacktrace(skipLevel)
 	return out
 end
 
-function Logger.log(msg, opts: types.Opts)
-	opts = opts or {}
-	local tags = opts.tags or {}
+return function(msg, opts: types.Opts?)
+	local options = opts or { tag = "_default" }
+	local tag = options.tag
 	local skip = 3
 
 	local ts = isoTimestamp()
@@ -49,10 +46,7 @@ function Logger.log(msg, opts: types.Opts)
 
 	local back = gatherBacktrace(skip)
 
-	local tagStr = ""
-	if #tags > 0 then
-		tagStr = " [" .. table.concat(tags, "][") .. "]"
-	end
+	local tagStr = "[" .. tag .. "]"
 
 	local out = {}
 	table.insert(out, string.format("🚨 [PANIC] %s  🟡 | %s", ts, tagStr))
@@ -68,7 +62,10 @@ function Logger.log(msg, opts: types.Opts)
 
 	local final = table.concat(out, "\n")
 	warn(final)
-	return true
-end
 
-return setmetatable({}, { __index = Logger })
+	if final:len() > 0 then
+		return true
+	else
+		return false
+	end
+end
