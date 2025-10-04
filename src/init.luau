@@ -1,8 +1,27 @@
-local logger = require(script.logger)
+local failGuard = require(script.failGuard)
+local try = require(script.try)
+local types = require(script.types)
 
---[[ 
-	You have to import your file and export it here.
-]]
-return {
-	logger = logger,
-}
+local Panic = {}
+Panic.__index = Panic
+
+function new()
+	local self = setmetatable({}, Panic)
+	self.failguard = failGuard.new() :: any
+
+	self:Set("_panic", "ignore")
+	self:Set("_default", "ignore")
+	return self
+end
+
+function Panic:Set(tag: string, policy: types.Policy)
+	self.failguard:setPolicy(tag, policy)
+end
+
+function Panic:Try(fn, Opts: types.Opts?)
+	return try(fn, self.failguard, Opts)
+end
+
+local panic = new()
+
+return panic

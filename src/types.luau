@@ -1,5 +1,7 @@
 export type Opts = {
-	tags: { string }?,
+	tag: string?,
 }
+
+export type Policy = "abort" | "ignore"
 
 return nil

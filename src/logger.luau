@@ -41,7 +41,7 @@ end
 
 function Logger.log(msg, opts: types.Opts)
 	opts = opts or {}
-	local tags = opts.tags or {}
+	local tag = opts.tag or "_core"
 	local skip = 3
 
 	local ts = isoTimestamp()
@@ -49,10 +49,7 @@ function Logger.log(msg, opts: types.Opts)
 
 	local back = gatherBacktrace(skip)
 
-	local tagStr = ""
-	if #tags > 0 then
-		tagStr = " [" .. table.concat(tags, "][") .. "]"
-	end
+	local tagStr = "[" .. tag .. "]"
 
 	local out = {}
 	table.insert(out, string.format("🚨 [PANIC] %s  🟡 | %s", ts, tagStr))
