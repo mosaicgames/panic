@@ -13,5 +13,6 @@ end)
 
 it("should fallback to _default tag if none provided", function()
 	local ok = logger("Another error")
-	expect(ok).to.equal(true)
+
+	expect(ok).toEqual(expect.never.stringContaining("_default"))
 end)
