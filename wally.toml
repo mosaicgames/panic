@@ -2,7 +2,7 @@
 name = "mosaicgames/panic"
 description = "A lightweight debugging and error-handling library for Roblox."
 license = "MIT"
-version = "0.1.0"
+version = "0.1.2"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 exclude = ["**"]
