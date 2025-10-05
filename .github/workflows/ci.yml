@@ -22,7 +22,7 @@ jobs:
         run: wally install
 
       - name: Generate sourcemap.json
-        run: rojo sourcemap default.project.json -o sourcemap.json
+        run: rojo sourcemap game.project.json -o sourcemap.json
 
       - name: Download global Roblox types
         run: curl -o scripts/roblox.d.luau https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/main/scripts/globalTypes.d.luau

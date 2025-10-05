@@ -47,7 +47,7 @@ jobs:
           rm -rf src/jest.config.luau
 
       - name: Build Roblox model with Rojo
-        run: rojo build module.project.json -o panic.rbxm
+        run: rojo build default.project.json -o panic.rbxm
 
       - name: Upload release artifact
         uses: softprops/action-gh-release@v1
